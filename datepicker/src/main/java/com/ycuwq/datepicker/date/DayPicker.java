@@ -1,5 +1,7 @@
 package com.ycuwq.datepicker.date;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -11,13 +13,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
-
 /**
  * 日期选择
  * Created by ycuwq on 17-12-28.
  */
-public class DayPicker extends WheelPicker<Integer>{
+public class DayPicker extends WheelPicker<Integer> {
 
     private int mMinDay, mMaxDay;
 
@@ -25,7 +25,9 @@ public class DayPicker extends WheelPicker<Integer>{
 
     private int mYear, mMonth;
     private long mMaxDate, mMinDate;
-    private  boolean mIsSetMaxDate;
+    private boolean mIsSetMaxDate;
+
+    private boolean mEnabled;
 
     private OnDaySelectedListener mOnDaySelectedListener;
 
@@ -37,12 +39,12 @@ public class DayPicker extends WheelPicker<Integer>{
         this(context, attrs, 0);
     }
 
-    public DayPicker(Context context,  AttributeSet attrs, int defStyleAttr) {
+    public DayPicker(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-	    setItemMaximumWidthText("00");
-	    NumberFormat numberFormat = NumberFormat.getNumberInstance();
-	    numberFormat.setMinimumIntegerDigits(2);
-	    setDataFormat(numberFormat);
+        setItemMaximumWidthText("00");
+        NumberFormat numberFormat = NumberFormat.getNumberInstance();
+        numberFormat.setMinimumIntegerDigits(2);
+        setDataFormat(numberFormat);
 
         mMinDay = 1;
         mMaxDay = Calendar.getInstance().getActualMaximum(Calendar.DATE);
@@ -50,13 +52,13 @@ public class DayPicker extends WheelPicker<Integer>{
         mSelectedDay = Calendar.getInstance().get(Calendar.DATE);
         setSelectedDay(mSelectedDay, false);
         setOnWheelChangeListener(new OnWheelChangeListener<Integer>() {
-	        @Override
-	        public void onWheelSelected(Integer item, int position) {
-	        	mSelectedDay = item;
-		        if (mOnDaySelectedListener != null) {
-		        	mOnDaySelectedListener.onDaySelected(item);
-		        }
-	        }
+            @Override
+            public void onWheelSelected(Integer item, int position) {
+                mSelectedDay = item;
+                if (mOnDaySelectedListener != null) {
+                    mOnDaySelectedListener.onDaySelected(item);
+                }
+            }
         });
     }
 
@@ -94,6 +96,12 @@ public class DayPicker extends WheelPicker<Integer>{
         }
     }
 
+    public void setDayEnabled(boolean enabled) {
+        this.mEnabled = enabled;
+        setEnabled(enabled);
+        postInvalidate();
+    }
+
     public int getSelectedDay() {
         return mSelectedDay;
     }
@@ -116,11 +124,11 @@ public class DayPicker extends WheelPicker<Integer>{
         mMinDate = date;
     }
 
-	public void setOnDaySelectedListener(OnDaySelectedListener onDaySelectedListener) {
-		mOnDaySelectedListener = onDaySelectedListener;
-	}
+    public void setOnDaySelectedListener(OnDaySelectedListener onDaySelectedListener) {
+        mOnDaySelectedListener = onDaySelectedListener;
+    }
 
-	private void updateDay() {
+    private void updateDay() {
         List<Integer> list = new ArrayList<>();
         for (int i = mMinDay; i <= mMaxDay; i++) {
             list.add(i);
@@ -129,6 +137,6 @@ public class DayPicker extends WheelPicker<Integer>{
     }
 
     public interface OnDaySelectedListener {
-    	void onDaySelected(int day);
+        void onDaySelected(int day);
     }
 }

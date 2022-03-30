@@ -19,13 +19,9 @@ public class MainActivity extends AppCompatActivity {
         DatePicker datePicker = findViewById(R.id.datePicker);
         Button button = findViewById(R.id.button);
         button.setOnClickListener(v -> {
+            datePicker.setDayEnabled(false);
             DatePickerDialogFragment datePickerDialogFragment = new DatePickerDialogFragment();
-            datePickerDialogFragment.setOnDateChooseListener(new DatePickerDialogFragment.OnDateChooseListener() {
-                @Override
-                public void onDateChoose(int year, int month, int day) {
-                    Toast.makeText(getApplicationContext(), year + "-" + month + "-" + day, Toast.LENGTH_SHORT).show();
-                }
-            });
+            datePickerDialogFragment.setOnDateChooseListener((year, month, day) -> Toast.makeText(getApplicationContext(), year + "-" + month + "-" + day, Toast.LENGTH_SHORT).show());
             datePickerDialogFragment.show(getFragmentManager(), "DatePickerDialogFragment");
         });
         datePicker.setOnDateSelectedListener(new DatePicker.OnDateSelectedListener() {

@@ -20,6 +20,7 @@ public class YearPicker extends WheelPicker<Integer> {
 
     private int mStartYear, mEndYear;
     private int mSelectedYear;
+    private boolean mEnabled;
     private OnYearSelectedListener mOnYearSelectedListener;
 
     public YearPicker(Context context) {
@@ -36,15 +37,17 @@ public class YearPicker extends WheelPicker<Integer> {
         setItemMaximumWidthText("0000");
         updateYear();
         setSelectedYear(mSelectedYear, false);
-        setOnWheelChangeListener(new OnWheelChangeListener<Integer>() {
-            @Override
-            public void onWheelSelected(Integer item, int position) {
-            	mSelectedYear = item;
-                if (mOnYearSelectedListener != null) {
-                    mOnYearSelectedListener.onYearSelected(item);
+        if (mEnabled) {
+            setOnWheelChangeListener(new OnWheelChangeListener<Integer>() {
+                @Override
+                public void onWheelSelected(Integer item, int position) {
+                    mSelectedYear = item;
+                    if (mOnYearSelectedListener != null) {
+                        mOnYearSelectedListener.onYearSelected(item);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void initAttrs(Context context, AttributeSet attrs) {
@@ -93,20 +96,26 @@ public class YearPicker extends WheelPicker<Integer> {
         setEndYear(endYear);
     }
 
-    public void setSelectedYear(int selectedYear) {
-        setSelectedYear(selectedYear, true);
-    }
-
     public void setSelectedYear(int selectedYear, boolean smoothScroll) {
         setCurrentPosition(selectedYear - mStartYear, smoothScroll);
     }
 
     public int getSelectedYear() {
-    	return mSelectedYear;
+        return mSelectedYear;
+    }
+
+    public void setSelectedYear(int selectedYear) {
+        setSelectedYear(selectedYear, true);
     }
 
     public void setOnYearSelectedListener(OnYearSelectedListener onYearSelectedListener) {
         mOnYearSelectedListener = onYearSelectedListener;
+    }
+
+    public void setYearEnabled(boolean enabled) {
+        this.mEnabled = enabled;
+        setEnabled(enabled);
+        postInvalidate();
     }
 
     public interface OnYearSelectedListener {

@@ -52,8 +52,7 @@ public class DatePickerDialogFragment extends DialogFragment {
 			@Override
 			public void onClick(View v) {
 				if (mOnDateChooseListener != null) {
-					mOnDateChooseListener.onDateChoose(mDatePicker.getYear(),
-							mDatePicker.getMonth(), mDatePicker.getDay());
+					mOnDateChooseListener.onDateChoose(mDatePicker.getYear(), mDatePicker.getMonth(), mDatePicker.getDay());
 				}
 				dismiss();
 			}
